@@ -3,7 +3,7 @@
 $pesan = "";
 $errors = [];
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
+if (isset($_POST("simpan")) {
 
     // Mengambil data dari form
     $nama          = trim($_POST["nama"] ?? "");
@@ -13,18 +13,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email         = trim($_POST["email"] ?? "");
     $username_user = trim($_POST["username"] ?? "");
     $password_user = $_POST["password"] ?? "";
-
-    if (
-        $nama === "" ||
-        $tempat_lahir === "" ||
-        $tgl_lahir === "" ||
-        $jenis_kelamin === "" ||
-        $email === "" ||
-        $username_user === "" ||
-        $password_user === ""
-    ) {
-        $errors[] = "Semua field wajib diisi.";
-    }
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors[] = "Format email tidak valid.";
@@ -60,12 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             );
 
             // Query INSERT
-            $sql = "INSERT INTO pengguna
-                    (nama, tempat_lahir, tgl_lahir,
-                     jenis_kelamin, email, username,
-                     password, timestamp_regis)
-                    VALUES (?, ?, ?, ?, ?, ?, ?,
-                            CURRENT_TIMESTAMP)";
+            $sql = "INSERT INTO pengguna (nama, tempat_lahir, tgl_lahir, jenis_kelamin, email, username, password, timestamp_regis) VALUES (?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
 
             $stmt = mysqli_prepare($conn, $sql);
 
